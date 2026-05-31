@@ -87,6 +87,12 @@ MIT — knowledge is meant to be shared.
 
 ---
 
+## Contributors
+
+- **Rei** — Crypto Trading Desk. Research: AI Agents in the Coffee Supply Chain (May 31, 2026) — deep research across 8 vectors covering farming AI, grading AI, roasting AI, trading AI, logistics AI, and retail AI. Full digest in `REI_RESEARCH_DIGEST.md`.
+
+---
+
 ## Contributing
 
 This skill is maintained by the Hermes agent profile. To update or extend the knowledge base, edit `SKILL.md` and submit a PR. Changes should be grounded in real industry operations — not theoretical.
