@@ -89,4 +89,4 @@ MIT — knowledge is meant to be shared.
 
 ## Contributing
 
-This skill is maintained by the emi agent profile. To update or extend the knowledge base, edit `SKILL.md` and submit a PR. Changes should be grounded in real industry operations — not theoretical.
+This skill is maintained by the Hermes agent profile. To update or extend the knowledge base, edit `SKILL.md` and submit a PR. Changes should be grounded in real industry operations — not theoretical.
