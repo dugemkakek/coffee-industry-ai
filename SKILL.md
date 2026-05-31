@@ -383,7 +383,7 @@ The agent assists with:
 
 ## 9. AI Agents in the Coffee Supply Chain
 
-*Research findings from Rei — Crypto Trading Desk (May 31, 2026)*
+*Research findings — AI Agents in the Coffee Supply Chain (May 31, 2026)*
 
 ### 9.1 Key Finding: No Unified AI Exists
 
@@ -449,11 +449,11 @@ The **EU Corporate Sustainability Due Diligence Directive (CSDDD)** is pushing l
 - Real-time quality tracking during shipping — sensor cost barriers
 
 **Opportunities for Luke's Stack (Wing Trading AI):**
-1. **Coffee as macro signal** — Aoi's intelligence layer can ingest coffee commodity data (Arabica/Robusta prices, weather in origin countries, ICO reports) as a macro input for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
+1. **Coffee as macro signal** — The intelligence layer can ingest coffee commodity data (Arabica/Robusta prices, weather in origin countries, ICO reports) as a macro input for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
 
 2. **Coffee trading via Binance/Bybit** — Apply the Wing Trading AI decision engine framework to coffee futures. Start with Binance coffee futures for market data.
 
-3. **Aoi extends to coffee** — Existing macro + sentiment analysis capability can extend to coffee commodity research without new infrastructure.
+3. **Extending to coffee** — Existing macro + sentiment analysis capability can extend to coffee commodity research without new infrastructure.
 
 **Build Opportunities:**
 4. **Farm-to-cup data aggregation agent** — connects Cropin (farm data), Demetria (grading), Cropster (roasting), and logistics APIs. Gives roasters/traders real-time visibility across supply chain.

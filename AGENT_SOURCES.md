@@ -16,7 +16,7 @@ AI adoption across the coffee supply chain is uneven. Trading desks and large re
 
 The key finding: **there is no unified AI agent that spans the full coffee supply chain**. Each post — farming, grading, roasting, trading, logistics, retail — has fragmented point solutions. The biggest opportunity is building agentic AI systems that connect these stages, from cherry to cup, with real-time data flowing between them.
 
-For Luke's stack: this is a strong candidate for the Wing Trading AI project's intelligence layer. Aoi's decision engine could ingest coffee commodity data as an alternative market. Rei's execution precision framework could inform risk management for coffee trading positions.
+For Luke's stack: this is a strong candidate for the Wing Trading AI project's intelligence layer. The intelligence layer could ingest coffee commodity data as an alternative market. The execution precision framework could inform risk management for coffee trading positions.
 
 ---
 
@@ -407,11 +407,11 @@ Starbucks Deep Brew is documented in earnings calls and press. Luckin Coffee is 
 
 ### For Luke's Stack (Wing Trading AI)
 
-1. **Coffee as an alternative market** — Aoi's intelligence layer could ingest coffee commodity data (Arabica/Robusta prices, weather, ICO reports) as a macro signal for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
+1. **Coffee as an alternative market** — The intelligence layer could ingest coffee commodity data (Arabica/Robusta prices, weather, ICO reports) as a macro signal for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
 
 2. **Coffee trading strategy research** — Apply the Wing Trading AI decision engine framework to coffee futures. Coffee trades on Binance, Bybit, and ICE (though ICE may be restricted). Start with Binance coffee futures.
 
-3. **Aoi as the coffee intelligence agent** — Aoi's existing macro + sentiment analysis capability could extend to coffee commodity research without new infrastructure.
+3. **The intelligence layer** — Existing macro + sentiment analysis capability could extend to coffee commodity research without new infrastructure.
 
 ### For a Dedicated Coffee AI Agent
 
@@ -520,4 +520,4 @@ CONSUMER
 
 ---
 
-*Research completed by Rei — crypto trading desk. For questions about this report, contact Luke or route through Aya.*
+*Research completed by an agent. For questions about this report, contact Luke or route through the orchestrator.*
