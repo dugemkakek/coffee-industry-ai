@@ -16,7 +16,7 @@ AI adoption across the coffee supply chain is uneven. Trading desks and large re
 
 The key finding: **there is no unified AI agent that spans the full coffee supply chain**. Each post — farming, grading, roasting, trading, logistics, retail — has fragmented point solutions. The biggest opportunity is building agentic AI systems that connect these stages, from cherry to cup, with real-time data flowing between them.
 
-For Luke's stack: this is a strong candidate for the Wing Trading AI project's intelligence layer. The intelligence layer could ingest coffee commodity data as an alternative market. The execution precision framework could inform risk management for coffee trading positions.
+For a coffee trading intelligence system: this is a strong candidate for a trading AI project's intelligence layer. The intelligence layer could ingest coffee commodity data as an alternative market. The execution precision framework could inform risk management for coffee trading positions.
 
 ---
 
@@ -405,7 +405,7 @@ Starbucks Deep Brew is documented in earnings calls and press. Luckin Coffee is 
 
 ## 10. Actionable Insights
 
-### For Luke's Stack (Wing Trading AI)
+### For Coffee Trading AI Systems
 
 1. **Coffee as an alternative market** — The intelligence layer could ingest coffee commodity data (Arabica/Robusta prices, weather, ICO reports) as a macro signal for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
 
@@ -520,4 +520,4 @@ CONSUMER
 
 ---
 
-*Research completed by an agent. For questions about this report, contact Luke or route through the orchestrator.*
+*Research completed by an intelligence agent. For questions about this report, route through the orchestrator.*

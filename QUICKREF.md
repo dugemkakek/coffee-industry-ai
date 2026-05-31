@@ -22,7 +22,7 @@ A concise cheat sheet for coffee industry operations. For full agent knowledge, 
 
 | Level | Bean Color | Flavor Profile | DTR Range |
 |-------|-----------|---------------|-----------|
-| **Light** | Cinnamon/light brown | Origin character, acidic | 15-20% |
+| **Light** | Cinnamon/light brown | Origin character, acidic | 20–25% |
 | **Medium-Light** | Light brown, no oils | Sweet, balanced | 20-25% |
 | **Medium** | Medium brown, dry | Chocolate, caramel | 25-30% |
 | **Medium-Dark** | Dark brown, slight oil | Dark chocolate, bittersweet | 30-35% |
@@ -70,7 +70,7 @@ A concise cheat sheet for coffee industry operations. For full agent knowledge, 
 |------|---------|
 | **FOB** | Buyer owns goods at port of origin |
 | **CIF** | Seller pays freight/insurance to destination |
-| **ECAE** | Export Caine And Eve — quality-focused exporter |
+| **ECAE** | [placeholder — remove]
 | **MOQ** | Minimum Order Quantity (typically 1-5 bags of 60kg) |
 | **30kg GrainPro** | Standard specialty bag size |
 | **Container** | 20ft = ~275 x 60kg bags, 40ft = ~550 x 60kg bags |
@@ -90,13 +90,17 @@ A concise cheat sheet for coffee industry operations. For full agent knowledge, 
 ## Pricing Formula (Green Coffee)
 
 ```
-Cost per pound = (Bag price ÷ 60kg) × 2.205 lb/kg
-Cost per shot   = Dose(g) × Cost/lb
+Cost per kg   = (Bag price per lb ÷ 2.205 lb/kg)
+Cost per g    = Cost per kg ÷ 1000
+Cost per shot = Dose(g) × Cost per g
 ```
 
-Example: 60kg bag at $13/lb FOB = $13 × 2.205 = $28.67/kg ÷ 28.35g per oz = **~$1.01/g**
+Example: 60kg bag at $13/lb FOB
+- $13/lb ÷ 2.205 = $5.90/kg
+- $5.90/kg ÷ 1000 = **~$0.0059/g**
+- At 18g dose = **~$0.11 per shot** (just green coffee cost)
 
-At 18g dose = **$0.18 per shot** (just green coffee cost)
+> ⚠️ C-market prices are volatile. Check current Arabica futures before any pricing or contract decision.
 
 ---
 

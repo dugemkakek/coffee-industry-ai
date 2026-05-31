@@ -21,6 +21,225 @@ The agent assists with:
 
 ---
 
+## Trigger Keywords
+
+This skill activates on any of the following topics:
+
+```
+kopi, coffee, espresso, roast, cupping, green bean, green coffee,
+arabica, robusta, giling basah, wet-hull, sourcing, barista,
+extraction, brew method, pour over, french press, aeroPress,
+WooCommerce, order, customer, supplier, origin, variety, lot,
+harvest, fermentation, first crack, development time,
+caffè, caffe, latte, cappuccino, single origin, blend,
+BPOM, halal, MUI, SNI, Indonesian coffee, Sumatra, Java, Sulawesi
+```
+
+---
+
+## Output Format Standards
+
+When returning structured data, agents must use these formats:
+
+**Cupping scores:**
+```json
+{
+  "sample_id": "string",
+  "score": 84.5,
+  "fragrance": 8.0,
+  "flavor": 8.5,
+  "aftertaste": 8.0,
+  "acidity": 8.0,
+  "body": 7.5,
+  "balance": 8.0,
+  "uniformity": 10,
+  "clean_cup": 10,
+  "sweetness": 10,
+  "overall": 8.0,
+  "defects": 0,
+  "notes": "string"
+}
+```
+
+**Supply chain / order status:**
+```json
+{
+  "type": "order_status | inventory_alert | price_update",
+  "origin": "string",
+  "quantity_kg": number,
+  "status": "pending | confirmed | shipped | arrived",
+  "eta": "YYYY-MM-DD",
+  "notes": "string"
+}
+```
+
+**Sourcing recommendation:**
+```json
+{
+  "origin": "string",
+  "region": "string",
+  "variety": "string",
+  "process": "washed | natural | honey",
+  "fob_price_usd_lb": number,
+  "moq_bags": number,
+  "lead_time_weeks": number,
+  "cupping_score_estimate": number,
+  "notes": "string"
+}
+```
+
+> ⚠️ **Price data staleness warning:** All pricing in this skill is approximate and may be outdated due to C-market volatility. Before any contract, pricing, or costing decision, run `web_search("Arabica coffee futures price today")` to get current market rates.
+
+---
+
+## Agent Roles
+
+This skill is designed for multi-agent stacks. Each agent type has a scoped subset of tasks it should perform using this skill. Agents should identify their role and route to their relevant scope.
+
+### Routing Logic
+
+| Agent Role | Primary Tasks | Escalates To |
+|---|---|---|
+| Store Ops | Orders, fulfillment, customer replies, WhatsApp | Operations (shipping issues), Research (out-of-stock sourcing) |
+| Content | Copy, social, education, flavor notes | Research (new origin info) |
+| Research | Sourcing, price, contracts, supplier scouting | Compliance (supplier certifications) |
+| Operations | Logistics, import, inventory, QC | Compliance (customs issues) |
+| Compliance | BPOM, SNI, Halal, labeling | External legal counsel for novel issues |
+| Archive | Data storage, seasonal logs | None — passive role |
+
+---
+
+## 1. Store Ops Agent
+
+**Task Scope:** Day-to-day customer-facing and operational coffee tasks.
+
+- Order processing (WhatsApp, WooCommerce)
+- Inventory status checks
+- Customer coffee questions (extraction, brew guidance, flavor questions)
+- Fulfillment coordination
+
+**Inputs:** Customer messages, WooCommerce order data, inventory reports
+
+**Outputs:** Order confirmations, shipping updates, brew guides, FAQ responses
+
+**Output Format:** Structured JSON for orders (see Output Format Standards); prose for customer replies
+
+**Trigger Keywords (in addition to global list):**
+`order`, `beli`, `pesan`, `stock`, `kirim`, `tracking`, `resi`, `WooCommerce`, `checkout`, `subscription`, `langganan`
+
+**Escalation Triggers:**
+- Complaint about wrong order
+- Refund request
+- Payment failure
+- Out-of-stock on item customer wants
+
+---
+
+## 2. Content Agent
+
+**Task Scope:** Marketing, product copy, social media, and educational content about coffee.
+
+- Product descriptions (for new coffees, seasonal releases)
+- Brew method guides (pour-over, espresso, French press)
+- Origin/cupping notes for customers (translating SCA cupping reports into readable flavor language)
+- Social media captions, email newsletters
+- Menu copywriting
+
+**Inputs:** Cupping reports, green coffee spec sheets, product lists, social media briefs
+
+**Outputs:** Product descriptions, blog posts, Instagram captions, flavor notes for packaging
+
+**Output Format:** Markdown with headers, bullet points. Customer-facing tone (not technical). Can include emoji.
+
+**Trigger Keywords:**
+`caption`, `post`, `instagram`, `deskripsi`, `menu`, `description`, `flavor`, `tasting notes`, `asal kopi`, `posting`, `content`
+
+---
+
+## 3. Research Agent (Sourcing & Procurement)
+
+**Task Scope:** Supplier scouting, price monitoring, new origin evaluation, contract decisions.
+
+- Monitoring Arabica/Robusta futures (web_search triggers)
+- Supplier comparison and evaluation
+- Cupping score analysis against price
+- Lead time and MOQ assessment
+- Contract review for FOB terms
+- EU CSDDD compliance for supply chain due diligence
+
+**Inputs:** Supplier quotes, cupping reports, price feeds, contract drafts
+
+**Outputs:** Supplier comparison tables (JSON), sourcing recommendations (JSON per Output Format Standards), contract risk assessments
+
+**Output Format:** Structured JSON for supplier data; markdown for analysis reports
+
+**Trigger Keywords:**
+`supplier`, `quote`, `harga`, `FOB`, `MOQ`, `lead time`, `asalan`, `sample`, `kopi baru`, `new origin`, `contract`, `futures`, `C-market`, `ICO`, `cropster`, `commodity price`
+
+---
+
+## 4. Operations Agent (Fulfillment & Logistics)
+
+**Task Scope:** Import logistics, shipping coordination, warehouse management, inventory tracking.
+
+- Container tracking (ETA, port delays)
+- QC check scheduling when shipment arrives
+- Inventory level monitoring and reorder triggers
+- Inter-island shipping requirements (phytosanitary, customs)
+- Storage condition monitoring (humidity, temperature)
+
+**Inputs:** Shipping documents, COO, BL (Bill of Lading), warehouse reports, inventory counts
+
+**Outputs:** Logistics status reports (JSON), inventory alerts, QC schedules
+
+**Output Format:** JSON for structured data; checklist format for SOPs
+
+**Trigger Keywords:**
+`container`, `shipping`, `kontainer`, `ETA`, `port`, `QC`, `gudang`, `inventory`, `stock`, `arrived`, `sampai`, `customs`, `bea cukai`, `fumigation`, `phytosanitary`
+
+---
+
+## 5. Compliance Agent
+
+**Task Scope:** Regulatory adherence, labeling, certifications.
+
+- BPOM product registration check
+- SNI compliance verification
+- Halal documentation management
+- Export permit review
+- Label content compliance (net weight, halal logo, BPOM number, nutritional info if applicable)
+
+**Inputs:** Product labels, ingredient lists, BPOM/SNI/Halal certificates, Indonesian food regulations
+
+**Outputs:** Compliance checklist (markdown), gap analysis, corrective action list
+
+**Output Format:** Markdown checklist with ✅/❌ items
+
+**Trigger Keywords:**
+`BPOM`, `SNI`, `halal`, `MUI`, `label`, `labeling`, `registrasi`, `sertifikat`, `compliance`, `izin`, `edar`, `distribution license`
+
+---
+
+## 6. Archive Agent
+
+**Task Scope:** Persistent storage and retrieval of historical coffee data.
+
+- Storing cupping reports by lot/season
+- Seasonal performance tracking (which origins scored best per season)
+- Supplier score history
+- Customer feedback per coffee (aggregated)
+
+**Inputs:** Cupping reports, customer feedback data, supplier performance records
+
+**Outputs:** Structured records in knowledge base; seasonal summaries
+
+**Output Format:** JSON records for storage; markdown summaries for human review
+
+**Trigger Keywords:**
+`store`, `archive`, `save`, `history`, `performance`, `track`, `log`, `database`
+
+---
+
 ## Core Knowledge Areas
 
 ### 1. Green Coffee Sourcing
@@ -37,6 +256,188 @@ The agent assists with:
 | Costa Rica | Tarrazú, Central Valley | Caturra, Catuaí, Villa Sarchi | Honey, citrus, clean finish |
 | Panama | Boquete, Volcán | Geisha, Bourbon, Caturra | Jasmine, bergamot, tropical fruit |
 | Yemen | Haraaz, Bani Matar | Heirloom | Dried fruit, wine, complex spice |
+| Indonesia | Sumatra, Java, Sulawesi, Flores | Typica, Catimor | Earthy, herbal, woody, full body |
+
+#### Indonesian Origins
+
+Indonesia is the world's fourth-largest coffee producer, unique for its dominant use of **Giling Basah (wet-hulling)** processing and its archipelago geography, which produces distinct regional flavor profiles across Sumatran, Javan, Sulawesi, Flores, Balinese, and Papuan origins.
+
+##### Sumatra — Mandheling, Lintong, Gayo
+
+**Key Regions:**
+- **North Sumatra**: Mandheling (Lake Toba region), Lintong (Lintongnihuta highlands)
+- **Aceh**: Gayo highlands around Banda Aceh, Lake Tawar
+
+**Common Varieties:** Typica, Catimor (Ateng, Bergimus sub-variants), Tim Tim (Hybrid of Timor)
+
+**Processing: Giling Basah (Wet-Hull)**
+
+The defining process for Sumatran coffee. Steps:
+
+1. **Cherry picking**: Ripe cherries harvested, pulped same day
+2. **Fermentation**: Overnight in tanks, 12–24 hours
+3. **Washing**: Rinsed with clean water to remove mucilage
+4. **First Drying**: Beans dried to ~30–35% moisture content (1–3 days on raised beds or concrete patios)
+5. **Wet-Hulling**: Hull removed mechanically while beans still moist — this is the defining step. Gives beans their characteristic blue-green "kulit ari" (pergamino remnant) appearance
+6. **Second Drying**: Hulled beans dried again to ~12–13% export moisture
+
+**Flavor Profile:** Earthy, cedar, herbal, dark chocolate, low acidity, syrupy body, "funky" low notes. The wet-hull process creates the distinctive Sumatran profile — heavy body, muted acidity, deep earthiness.
+
+**FOB Pricing:** $2.50–$4.50/lb for specialty Mandheling/Gayo lots
+
+**Harvest:**
+- Main crop: October–March
+- Fly crop: May–July (lower quality, smaller volume)
+
+**Key Exporters/Contacts:** Counter Culture Coffee (Gayo), Sucafina Indonesia, Pacific Commodities
+
+##### Java — Estate Coffee
+
+**Key Regions:** East Java: Ijen plateau, Bondowoso, Jampit, Blawan, Tugosari estates; West Java: Pangalengan highlands
+
+**History:** Dutch colonial estates from the 17th–19th century. Indonesia's oldest coffee-producing region with continuous estate tradition.
+
+**Common Varieties:** Typica, Bourbon (older estates), Catimor (newer plantings)
+
+**Processing:** Mostly washed on estate operations. Smaller farms may use natural or Giling Basah.
+
+**Flavor Profile:** Full body, dark chocolate, earthy with spicy/herbal notes. Some lots have a distinctive "smoky" character from estate processing. Cleaner than Sumatra, moderate acidity.
+
+**FOB Pricing:** $3.00–$6.00/lb for estate Java
+
+**Harvest:** Main crop November–April
+
+**Note:** Java estates are relatively large, corporate operations (PTPN group). Smaller farmer collectives also exist.
+
+##### Sulawesi — Toraja, Kalosi, Mamasa
+
+**Key Regions:** South Sulawesi: Tana Toraja highlands around Mount Latimojong; Mamasa: Western Sulawesi highlands; Kalosi: specialty market designation
+
+**Common Varieties:** Typica, Catimor (smallholder-sourced Catimor in Toraja)
+
+**Processing:** Mostly washed, with some Giling Basah. Increasingly honey process on specialty lots.
+
+**Flavor Profile:** Complex, earthy but cleaner than Sumatra, dark fruit, long finish, slightly spicy. Toraja has notably more acidity than typical Indonesian coffee — the most "bright" of the major Indonesian origins.
+
+**FOB Pricing:** $3.50–$6.00/lb
+
+**Harvest:** Main crop May–October
+
+**Sourcing Note:** Sulawesi coffee typically flows through collector/aggregator networks rather than direct estate relationships. Less direct traceability.
+
+##### Flores — Bajawa, Manggarai, Ruteng
+
+**Key Regions:** Central Nusa Tenggara: Bajawa volcano region, Manggarai, Ruteng. Isolated island geography with volcanic soils.
+
+**Common Varieties:** Typica, local Typica lines. Relatively isolated means less disease pressure — older variety lines have survived.
+
+**Processing:** Mostly washed, some Giling Basah.
+
+**Flavor Profile:** Earthy, woody, hint of citrus, cleaner than Sumatra. Volcanic soil contributes distinct mineral notes. An emerging specialty origin.
+
+**FOB Pricing:** $3.00–$5.00/lb
+
+**Harvest:** June–December
+
+**Note:** Emerging specialty origin. Limited exporter infrastructure — supply chains less developed.
+
+##### Bali — Kintamani
+
+**Key Region:** Kintamani highlands, Bangli district, Mount Agung volcanic slopes.
+
+**Common Varieties:** Typica, Bourbon, Catimor (local variant called "Kintamani")
+
+**Processing:** Primarily wet (traditional Balinese farming cooperatives).
+
+**Flavor Profile:** Bright acidity for Indonesian coffee, citrus, tropical fruit, some herbal notes, cleaner than Sumatra. Among the most "origin-expressive" of Indonesian coffees.
+
+**FOB Pricing:** $3.00–$5.50/lb
+
+**Harvest:** May–October
+
+**Note:** Relatively small volume. Unique cultural context — Bali is Hindu in majority-Muslim Indonesia.
+
+##### Papua — Baliem Valley
+
+**Key Region:** Baliem Valley, Jayawijaya highlands, 1400–2000m elevation. Very remote.
+
+**Common Varieties:** Improved Typica, local lines
+
+**Processing:** Mostly Giling Basah, some washed.
+
+**Flavor Profile:** Heavy body, earthy, low to mid acidity, wild forest notes.
+
+**FOB Pricing:** $2.50–$4.00/lb
+
+**Harvest:** April–September
+
+**Note:** Very remote origin, limited exporter access. Political complexity around West Papua. Supply chain can be unreliable. Not a primary sourcing origin for most roasters.
+
+##### Giling Basah (Wet-Hull) — Technical Deep Dive
+
+**What Makes It Unique:** Hull is removed at high moisture content (typically 30–35%), whereas most coffee globally is hulled at 11–12% moisture after full drying.
+
+**Why It Developed in Indonesia:** Indonesian climate is extremely humid, especially in Sumatra. Drying coffee to 11% in this humidity is difficult and slow. Wet-hulling allows farmers to dry to a safer intermediate moisture (~30–35%) and still process the bean to a storable, exportable state.
+
+**The Result — Not a Defect:**
+- Beans shrink and wrinkle during hulling at high moisture
+- Characteristic "kulit ari" or pergamino remnant appearance on beans
+- Color turns blue-green (not the brown of washed coffees)
+- This is a defined process, not a defect — though poor execution creates defects
+
+**Flavor Impact:** Creates the earthy, herbaceous, low-acid profile defining Sumatran/Mandheling style. Contributes to syrupy body. The "funky" bottom notes (earthy, herbal, cedar) are products of this process.
+
+**Risks When Done Incorrectly:**
+- Too much moisture at hulling → mold development, musty off-flavors
+- Inconsistent fermentation → irregular flavor development
+- "Potato defect" — rare in Indonesia but possible with poor handling
+
+**When to Reject Indonesian Lots:**
+- Strong musty/earthy smell beyond characteristic profile
+- Visible mold on beans
+- "Rubbery" off-flavor (improper fermentation)
+- Very high moisture content on arrival (>13%)
+
+##### Sourcing from Indonesia — Practical Notes
+
+**Supplier Types:**
+
+| Type | Examples | Pros | Cons |
+|------|----------|------|------|
+| Large exporters | Sucafina, Olam, ECOM | Easier logistics, consistent volume | Less traceability, commodity focus |
+| Specialty-focused | Pacific Commodities, Vecmont | More traceability, quality focus | Smaller lots, higher minimums |
+| Farmer cooperatives | Gayo Organic Coffee Cooperative, KNT | Direct, highland, excellent quality | MOQ challenging, lead time |
+| Collectors/aggregators | Various Sulawesi networks | Accessible for remote origins | Less traceability, variable quality |
+
+**MOQ:** Typically 1–5 × 60kg bags for specialty micro-lots. Exporters often ship 1-bag samples for quality approval.
+
+**Logistics:** Primary ports: Surabaya, Semarang (Java). Transit to US East Coast: ~4–6 weeks. Transshipment through Singapore often required.
+
+**Certifications:** Organic (USDA, EU), Rainforest Alliance, UTZ, Fair Trade exist but less common for smallholder lots. Verify per-lot — do not assume based on origin.
+
+**Cupping Notes — What to Look For:**
+
+| Note | Quality Implication |
+|------|---------------------|
+| Earthy, herbal, cedar | Characteristic of good Indonesian; desirable |
+| Tobacco | Acceptable, especially in Java |
+| Dark chocolate | Desirable, indicates proper development |
+| Musty, moldy | REJECT — processing/storage problem |
+| Rubber, chemical | REJECT — fermentation fault |
+| Potato | REJECT — serious defect (rare in Indonesia) |
+
+**Common Defects:** Water damage (humid storage), fermentation inconsistency, insect damage in field, immature beans from fly crop, hulling damage from wet-hull process if poorly executed.
+
+**Regional Flavor Summary:**
+
+| Origin | Body | Acidity | Key Notes | Best For |
+|--------|------|---------|-----------|----------|
+| Sumatra Mandheling/Gayo | Very Heavy | Low | Earthy, cedar, herbal, chocolate | Espresso blends, dark roasts |
+| Java Estate | Full | Medium | Dark chocolate, smoky, earthy | Drip, espresso |
+| Sulawesi Toraja | Full | Medium-High | Complex, dark fruit, spicy | Single origin pour-overs |
+| Flores Bajawa | Medium-Full | Medium | Earthy, woody, citrus, mineral | Single origin, light roast |
+| Bali Kintamani | Medium | Medium-High | Citrus, tropical fruit, clean | Bright pour-overs |
+| Papua Baliem | Heavy | Low-Mid | Earthy, forest, wild | Blending, dark applications |
 
 **Processing Methods:**
 
@@ -340,6 +741,147 @@ The agent assists with:
 
 ---
 
+### Indonesia Ops — WhatsApp & WooCommerce
+
+This section covers the day-to-day operational layer for Indonesian coffee businesses running WhatsApp-based orders and WooCommerce as the storefront.
+
+---
+
+#### WhatsApp Order Parsing
+
+WhatsApp is the primary order channel for many Indonesian coffee businesses. Agents must parse free-form messages in Bahasa Indonesia, English, or mixed-language.
+
+**Common Order Patterns:**
+
+| Pattern | Example | Parsed Intent |
+|---------|---------|---------------|
+| Direct product request | "Mau 2 bungkus Arabica Gayo" | 2 bags × Gayo |
+| Subscription | "Mau langganan 1 bulan" | Subscribe × 1 month |
+| Stock inquiry | "Ada kopi Flores?" | Query stock × Flores |
+| Price request | "Harga Giling Basah berapa?" | Query price × Giling Basah |
+| Reorder | "Sama kayak yang lalu" | Reorder × last order |
+| Partial/ambiguous | "bisa kirim ke solo?" | Query × delivery × Solo |
+
+**Intent Classification Output (JSON):**
+```json
+{
+  "channel": "whatsapp",
+  "customer_name": "string",
+  "message_raw": "string",
+  "intent": "order | inquiry | subscription | complaint | reorder | other",
+  "items": [
+    {
+      "product": "string or null",
+      "quantity": number,
+      "unit": "bag | kg | box | month",
+      "notes": "string or null"
+    }
+  ],
+  "delivery_address": "string or null",
+  "delivery_city": "string or null",
+  "confidence": 0.0-1.0,
+  "requires_human": false
+}
+```
+
+**Bilingual Response Templates:**
+
+*Order confirmation (Bahasa-dominant):*
+> "Halo [Nama]! Order diterima ✅\n> [Qty] × [Produk]\n> Total: Rp[Harga]\n> Dikirim ke: [Alamat]\n> Estimasi kirim: [H+1 hingga H+3]\n> Mohon konfirmasi dengan reply 'OK' ya."
+
+*Stock unavailable (mixed):*
+> "Mohon maaf, [Produk] sedang kosong. Estimasi restock: [Tanggal]. Alternative lain: [Produk pengganti] — mau dicoba?"
+
+*Subscription inquiry (English option):*
+> "For our subscription plans: 1-month (4 deliveries), 3-month (12 deliveries), or 6-month (24 deliveries). Each delivery is 250g or 500g of your chosen coffee. We roast fresh per delivery. Shall I set up your subscription?"
+
+**Escalation Rules — Route to Human When:**
+- Complaint about quality or wrong order
+- Order value > Rp 2,000,000 (suspiciously large)
+- Request for Net 30/60 payment terms
+- Delivery address is incomplete or unclear
+- Customer explicitly asks for roaster/proprietor
+- Same customer has 2+ complaints in 30 days
+
+---
+
+#### WooCommerce Integration
+
+**Order Status Flow:**
+
+```
+Pending Payment → Processing → Shipped → Completed
+                      ↓
+                  On Hold (if inventory issue)
+                      ↓
+                  Cancelled (if unresolved)
+```
+
+**Store Ops Agent WooCommerce Tasks:**
+
+1. **Check new orders** — Poll WooCommerce REST API (`/wp-json/wc/v3/orders`) for status = "pending" or "processing" every 15 minutes
+2. **Update inventory** — After each order, decrement stock for ordered products. If stock drops below reorder threshold, trigger inventory alert.
+3. **Mark shipped** — When fulfillment posts tracking number, update order status to "shipped" and add tracking note
+4. **Handle payment failures** — Orders stuck at "pending" > 48h should be flagged for follow-up
+
+**WooCommerce Stock Alert Format:**
+```json
+{
+  "type": "inventory_alert",
+  "product_name": "string",
+  "sku": "string",
+  "current_stock": number,
+  "reorder_threshold": number,
+  "status": "low_stock | out_of_stock",
+  "action_required": "reorder | contact_supplier | none",
+  "eta_if_reorder": "YYYY-MM-DD"
+}
+```
+
+**Key WooCommerce API Endpoints (for agent use):**
+- `GET /wp-json/wc/v3/orders?status=pending,processing` — new orders
+- `PUT /wp-json/wc/v3/orders/{id}` — update order status
+- `GET /wp-json/wc/v3/products` — product list with stock
+- `PUT /wp-json/wc/v3/products/{id}` — update stock quantity
+
+**WooCommerce + WhatsApp Sync Rule:**
+When an order ships, send WhatsApp message to customer with tracking number. Template:
+> "Halo [Nama]! Pesanan sudah dikirim 🚚\n> Tracking: [Nomor Resi]\n> Ekspedisi: [Jasa Kirim]\n> Estimasi sampai: [H+2 hingga H+5]\n> Lacak di: [Link Tracking]"
+
+---
+
+#### Order Fulfillment Checklist
+
+For each outgoing order:
+
+- [ ] Verify payment received (or confirm PayLater/transfer on hold)
+- [ ] Check product stock is physically available (not just WooCommerce count)
+- [ ] Roast fresh if roast-to-order model (note roast date on bag label)
+- [ ] Package: nitrogen flush or valve bag, opaque bag, label with: product name, roast date, net weight, BPOM/halal logos if applicable
+- [ ] Attach packing slip (order number, customer name, items)
+- [ ] Drop at courier before cutoff time (typically 15:00 WIB for same-day pickup)
+- [ ] Update WooCommerce order status to "shipped" with tracking number
+- [ ] Send WhatsApp shipping notification to customer
+
+---
+
+#### Pricing in IDR — Costing Basics
+
+For Indonesian operations, all pricing is in Rupiah (IDR). Agents working in WooCommerce must handle IDR correctly.
+
+**Key numbers:**
+- USD 1 ≈ IDR 16,000 (check current rate — this fluctuates)
+- 60kg green coffee bag at $13/lb FOB = ~IDR 12,480,000 per bag (before shipping, duties, local transport)
+- Cost per 250g retail bag (rough): (green coffee cost + roast loss + packaging + labor) × 2.2–2.5 markup = wholesale price
+- Consumer price guide (approximate):
+  - 250g homebrew single origin: IDR 75,000–150,000
+  - 250g premium/competition: IDR 150,000–350,000
+  - Espresso-based drinks at cafe: IDR 25,000–55,000
+
+**Margin Check:** Target gross margin ≥ 50% for wholesale, ≥ 60% for DTC retail after accounting for green coffee, packaging, labor, and shipping.
+
+---
+
 ### 8. Regulatory Compliance
 
 **FDA Requirements (US):**
@@ -378,6 +920,214 @@ The agent assists with:
 - EU Food Information Regulations: allergen labeling, nutritional info
 - Maximum residue levels (MRLs) for pesticides
 - Organic certification must be EU-equivalent
+
+### Indonesian Regulatory Compliance (BPOM, SNI, Halal)
+
+**Overview:** Indonesia's coffee market is regulated by three main frameworks: BPOM (food safety/registration), SNI (national standards), and MUI (halal certification). A fourth area covers export/import procedures. Compliance requirements vary based on whether you are roasting, packing, importing, or exporting coffee.
+
+---
+
+#### 1. BPOM — Badan Pengawas Obat dan Makanan
+
+**Role:** BPOM is Indonesia's food and beverage regulatory authority, equivalent to the US FDA. All food products sold commercially in Indonesia must be registered with BPOM and carry a distribution number (ML — Nomor Lisensi) on packaging.
+
+**Coffee Products Requiring BPOM Registration:**
+- Green coffee beans (biji kopi hijau)
+- Roasted coffee beans (kopi sangrai)
+- Ground roasted coffee (kopi bubuk)
+- Instant coffee (kopi instan)
+- Ready-to-drink (RTD) coffee beverages
+
+**BPOM Number Format:**
+Format: `AI 12345678901` — 13 digits total (2-letter prefix + 11 digits). Must appear on all packaged coffee products sold in Indonesia.
+
+**Application Process:**
+1. Register company on OSS (Online Single Submission) portal (oss.go.id) to obtain NIB (Nomor Induk Berusaha — Business Identification Number)
+2. Submit application via BPOM website (pom.go.id) with:
+   - Company legal documents (NIB, business license)
+   - Product formulation and details
+   - Label design (must comply with BPOM labeling rules)
+   - Test results from accredited laboratory (KAN-accredited labs)
+3. BPOM review and inspection
+4. Issuance of ML (distribution license) number
+
+**Timeline:** 3–6 months for new registration. Emergency use of existing registered products (purchased from authorized distributor) can be faster.
+
+**For Importers (e.g., Solo roaster importing green beans):**
+- The importer must hold a BPOM-authorized import license
+- The roaster buying from a registered importer does not always need their own BPOM number
+- However, if the roaster brands and sells their own packaged product, they need their own BPOM ML number
+
+**Key BPOM Standards for Coffee:**
+
+| Parameter | Limit |
+|-----------|-------|
+| Green coffee max moisture | 12.5% |
+| Roasted coffee max moisture | ≤5.0% (see SNI) |
+| Aflatoxin B1 | ≤5 ppb |
+| Aflatoxin total | ≤10 ppb |
+| Lead | ≤0.1 mg/kg |
+| Cadmium | ≤0.05 mg/kg |
+| Total Viable Count (TVC) | ≤10^5 cfu/g |
+| E. coli | Absent in 0.1g |
+| Salmonella | Absent in 25g |
+
+**Note on Cadmium:** Indonesian coffee often tests higher in cadmium due to volcanic soil. Roasters should source from suppliers who test and can provide documentation. This is a known issue for Toraja, Sulawesi, and some Java coffees.
+
+**Key Contacts:**
+- BPOM Head Office: Jakarta — pom.go.id
+- Provincial/municipal offices in each province
+- OSS portal for business licensing: oss.go.id
+
+---
+
+#### 2. SNI — Standar Nasional Indonesia (Indonesian National Standard)
+
+**Standard:** SNI 01-3542:2019 — Indonesian National Standard for Roasted Coffee
+
+**Scope:** Defines requirements for roasted coffee beans, ground roasted coffee, and instant coffee sold in Indonesia. Compliance is mandatory under Permentan 59/2018 (Ministry of Agriculture regulation making SNI mandatory for agricultural products).
+
+**Key Requirements under SNI 01-3542:2019:**
+
+| Parameter | Requirement |
+|-----------|-------------|
+| Moisture content | ≤5.0% (weight basis) |
+| Ash content | 3.0–6.0% for pure coffee (detects adulteration with starch, chicory, soybean, corn) |
+| Caffeine content | Minimum 0.3% for pure roasted coffee (detects adulteration) |
+| Extraneous matter | ≤0.1% by weight |
+| Defect count | Maximum allowable defects per 300g sample (black, sour, insect-damaged, etc.) |
+| Packaging | Food-grade, airtight, light-protective (foil laminate or opaque) |
+| Net content | Must match labeled amount (random government inspections) |
+
+**SNI Certification Process:**
+1. Apply to BSN (Badan Standardisasi Nasional — National Standards Body)
+2. Submit product for testing by KAN-accredited laboratory
+3. Factory audit by BSN assessor
+4. Certificate issuance (valid for variable period, typically 1–3 years)
+5. Surveillance audits
+
+**SNI Certification Costs (approximate):**
+- Initial audit: IDR 15–30 million
+- Annual maintenance fees: IDR 5–15 million
+- Laboratory testing: IDR 2–10 million per product
+
+**Practical Reality for Small Roasters:**
+- SNI certification is expensive and burdensome for micro/small roasters
+- Most small artisan roasters operate with understanding that enforcement targets large commercial players
+- However, if selling through modern retail channels (Indomaret, Alfamart, supermarkets, e-commerce platforms like Tokopedia/Shopee), retailers typically require SNI compliance
+- Small roasters selling direct-to-consumer (DTC) with no retail distribution often operate without SNI, though this carries some legal risk
+
+**SNI Mark (Tanda SNI):** Diamond-shaped mark. Not required for small artisan roasters selling direct-to-consumer if not requested by customers or retailers.
+
+---
+
+#### 3. Halal Certification — MUI (Majelis Ulama Indonesia)
+
+**Background:** Indonesia has the world's largest Muslim population (~87%). Halal certification is important for market access, particularly in modern retail and for Muslim consumers.
+
+**Legal Framework:** Law No. 33/2014 on Halal Product Assurance mandates that all food, beverage, and consumer goods sold in Indonesia must be halal-certified by 2026 (phased implementation timeline).
+
+**Coffee Products and Halal Status:**
+
+| Product Type | Halal Requirement |
+|--------------|-------------------|
+| Pure roasted coffee beans (100% coffee, no additives) | Generally NOT required — coffee itself is not haram (forbidden). Some producers get a "halal-free" letter or self-declare. |
+| Flavored coffee (vanilla, caramel, etc.) | Required — added ingredients trigger mandatory certification |
+| Instant coffee with sugar/creamer | Required — multi-ingredient product |
+| Coffee with milk powder/cream | Required |
+| Coffee-based beverages (Latte, Cappuccino mixes) | Required |
+
+**MUI Halal Certification Process:**
+1. Apply to MUI Provincial or Central office with product formulation and full ingredients list
+2. Submit sample to accredited laboratory for halal testing
+3. Factory audit by MUI assessor team
+4. MUI Fatwa Commission review
+5. Halal certificate issued
+
+**Timeline:** 3–6 months typically
+**Cost:** IDR 5–20 million depending on product complexity
+**Certificate Validity:** 2 years with annual surveillance audit
+
+**For Pure Coffee Roasters:**
+If you sell only 100% roasted coffee with no additives, no flavoring, no blending with milk/cream products, you may be able to:
+- Obtain a "halal-free" letter from MUI (surat keterangan bebas halal)
+- Self-declare (increasingly accepted for pure single-ingredient products)
+
+**Halal Logo:** White diamond shape with Arabic script. Required on packaging for certified products. Some specialty roasters avoid displaying the halal logo as it may limit export flexibility to non-Muslim markets.
+
+---
+
+#### 4. Export from Indonesia
+
+**Inter-Island Shipping (e.g., Sumatra to Java):**
+- Phytosanitary Certificate (Sertifikat Kesehatan Karantina) from Indonesian Quarantine Agency (Barantin) required
+- Must meet quality standards of destination province
+- Mobile coffee quality declarations
+
+**Export from Indonesia (International):**
+
+| Requirement | Details |
+|-------------|---------|
+| Phytosanitary Certificate | Required; ISPM 15 compliance for wood packaging materials |
+| Certificate of Origin | From Chamber of Commerce (Kadin) — required for most destinations |
+| Fumigation | Methyl bromide treatment often required; heat treatment preferred (more environmentally friendly) |
+| Documentation | Cupping report, SCA score documentation helpful for customs clearance in destination country |
+| Export duty | 7% on green coffee (check current rates as subject to change) |
+
+---
+
+#### 5. Import into Indonesia
+
+**For Roasters Importing Green Coffee:**
+- **NPIK (Nomor Pengenal Importir Khusus):** Special Importer Identification Number — required for commercial importers
+- **Import Declaration (SPP):** Submitted via INSW (Indonesia National Single Window) system
+- **Quarantine clearance:** Must present phytosanitary certificate from country of origin
+- **Import tariffs on green coffee:**
+  - Import duty: 5%
+  - VAT (PPN): 10%
+  - Luxury goods tax (PPnBM): Not typically applied to green coffee
+- **Coffee roasting machines:** 0% import duty under HS code 8479.20.00 (check specific machine classification); VAT still applies
+
+---
+
+#### 6. Food Safety — HACCP, GMP, and Licensing
+
+**BPOM Requirements:**
+- HACCP (Hazard Analysis and Critical Control Points) plan required for food businesses
+- GMP (Good Manufacturing Practice) certification recommended
+
+**Basic Food Safety SOPs for Roasters:**
+- Handwashing and personal hygiene
+- Equipment sanitation schedules
+- Pest control program
+- Temperature and moisture monitoring
+- Separate storage of green vs. roasted coffee
+- Traceability records
+
+**Licensing Tiers in Indonesia:**
+
+| License Type | Description |
+|--------------|-------------|
+| PIRT (Produk Industri Rumah Tangga) | For home/small-scale food businesses — not suitable for commercial roasters |
+| MD (Marketing Authorization) | Product registration — number assigned to registered product |
+| ML (Nomor Lisensi — Distribution License) | Facility license for distribution of registered product |
+| NIB (Nomor Induk Berusaha) | Business identification number from OSS — required first step |
+
+**Recommendation for Commercial Roasters:** Aim for MD/ML from BPOM rather than PIRT. NIB is the foundational business registration obtained through oss.go.id.
+
+---
+
+#### Quick Reference Summary
+
+| Requirement | Mandatory? | Notes |
+|-------------|------------|-------|
+| BPOM ML number | Yes (for packaged product sales) | 3–6 months to obtain |
+| SNI 01-3542:2019 | Yes (for roasted coffee) | Enforced for retail; relaxed for DTC artisan |
+| Halal certification | Yes (if product contains non-coffee ingredients) | 3–6 months, IDR 5–20M |
+| Phytosanitary (inter-island) | Yes | From Barantin |
+| Phytosanitary (export) | Yes | ISPM 15 for wood packaging |
+| HACCP plan | Yes (for food businesses) | Implement basic food safety SOPs |
+| Import license (NPIK) | Yes (for importers) | For roasters importing directly |
 
 ---
 
@@ -448,10 +1198,10 @@ The **EU Corporate Sustainability Due Diligence Directive (CSDDD)** is pushing l
 - No end-to-end AI system connecting farm to cup
 - Real-time quality tracking during shipping — sensor cost barriers
 
-**Opportunities for Luke's Stack (Wing Trading AI):**
+**Opportunities for Coffee Trading AI:**
 1. **Coffee as macro signal** — The intelligence layer can ingest coffee commodity data (Arabica/Robusta prices, weather in origin countries, ICO reports) as a macro input for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
 
-2. **Coffee trading via Binance/Bybit** — Apply the Wing Trading AI decision engine framework to coffee futures. Start with Binance coffee futures for market data.
+2. **Coffee trading via crypto exchanges** — Apply a trading AI decision engine framework to coffee futures. Start with Binance/Bybit coffee perpetual contracts for market data.
 
 3. **Extending to coffee** — Existing macro + sentiment analysis capability can extend to coffee commodity research without new infrastructure.
 

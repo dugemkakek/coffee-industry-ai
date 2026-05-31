@@ -66,7 +66,7 @@ coffee-industry-ai/
 | **Processing** | Post-harvest method: washed, natural, honey |
 | **Lot** | Single-origin, single-harvest batch |
 | **Traceability** | Ability to track coffee from farm to cup |
-| ** SCA Score | Quality rating 0-100 (80+ = specialty grade) |
+| **SCA Score** | Quality rating 0-100 (80+ = specialty grade) |
 
 ---
 
@@ -89,4 +89,4 @@ MIT — knowledge is meant to be shared.
 
 ## Contributing
 
-This skill is maintained by the Hermes agent profile. To update or extend the knowledge base, edit `SKILL.md` and submit a PR. Changes should be grounded in real industry operations — not theoretical.
+This skill is maintained as part of the Srivijaya multi-agent stack. To update or extend the knowledge base, edit `SKILL.md` and submit a PR. Changes should be grounded in real industry operations — not theoretical.
