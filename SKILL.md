@@ -375,10 +375,110 @@ The agent assists with:
 - For blends, origin of each component if marketed as origin-specific
 
 **EU Regulations:**
-
 - EU Food Information Regulations: allergen labeling, nutritional info
 - Maximum residue levels (MRLs) for pesticides
 - Organic certification must be EU-equivalent
+
+---
+
+## 9. AI Agents in the Coffee Supply Chain
+
+*Research findings from Rei — Crypto Trading Desk (May 31, 2026)*
+
+### 9.1 Key Finding: No Unified AI Exists
+
+**The coffee industry has no end-to-end AI agent connecting farm to cup.** Each stage — farming, grading, roasting, trading, logistics, retail — has fragmented point solutions that don't communicate. The biggest opportunity is building agentic AI systems that connect these stages with real-time data flowing between them.
+
+### 9.2 AI Adoption by Stage
+
+| Stage | AI Maturity | Key Technologies |
+|-------|-------------|-----------------|
+| **Farming** | Low | Precision ag, satellite/drone imaging, disease detection, yield prediction |
+| **Grading/QC** | Medium-High | Computer vision sorting (Demetria, Te.A.works), NIR spectroscopy |
+| **Roasting** | Medium | Automated roast profiling, predictive color tracking, blend optimization |
+| **Trading** | High | Price forecasting, procurement optimization, arbitrage detection |
+| **Logistics** | Medium | Route optimization, cold chain monitoring, blockchain traceability |
+| **Retail** | High | Demand forecasting, dynamic pricing, personalization, inventory |
+
+**Computer vision is the most mature AI technology** in coffee — defect sorting, disease detection, and color tracking are all commercially deployed.
+
+### 9.3 Key Companies & Technologies
+
+**Farming AI:**
+- **Cropin** (India) — farm intelligence platform, satellite + IoT, commercial deployment at large plantations
+- **PlantVillage Nuru** — free disease detection app deployed in East Africa, smartphone-based
+- **World Coffee Research (WCR)** — AI for breeding disease-resistant varieties
+
+**Grading AI:**
+- **Demetria** (Colombia/USA) — NIR spectroscopy + ML for green coffee quality classification, partnered with Starbucks
+- **Te.A.works** (Colombia) — optical sorting with AI at processing facilities
+- **Singulator** (Australia) — AI cherry grading at farm level
+
+**Roasting AI:**
+- **Banana Rain** (USA) — AI roasting "Botz" system, machine learning roast optimization
+- **Bellwether Coffee** (USA) — electric smart roasters, cloud-connected, sustainability focus
+- **Cropster** — market leader in roast profiling software, 2000+ roasters, large dataset of roast profiles
+
+**Trading AI:**
+- **ECOM** (Switzerland) — major global trader, proprietary AI trading and risk management
+- **Volcafe** — weather + crop analytics for trading intelligence
+- ICO (International Coffee Organization) — market reports with ML insights
+
+**Logistics AI:**
+- **Farmer Connect** (IBM) — blockchain + AI, Starbucks using it, 400,000+ farmers connected
+- **Bext360** — origin verification, blockchain traceability
+- **Mosi** — cold chain monitoring, route optimization
+
+**Retail AI:**
+- **Luckin Coffee** (China) — AI-native retailer, 10,000+ stores, app-only ordering, demand prediction at scale
+- **Nespresso** — AI subscription management, churn prediction
+- **Starbucks Deep Brew** — personalized recommendations, demand forecasting
+
+### 9.4 EU Sustainability Regulations — Key Driver
+
+The **EU Corporate Sustainability Due Diligence Directive (CSDDD)** is pushing large buyers (Nestlé, Starbucks, Lavazza) to verify sustainability claims at farm level. This is funding AI traceability tools that previously had no business case.
+
+**Impact:** Mandatory supply chain due diligence = AI traceability becomes compliance requirement, not nice-to-have.
+
+### 9.5 Gaps & Opportunities
+
+**Gaps:**
+- Smallholder farmers (~80% of global coffee) lack affordable AI tools — connectivity and cost barriers
+- Electronic nose for flavor prediction — 3-5 years away from commercial reliability
+- No end-to-end AI system connecting farm to cup
+- Real-time quality tracking during shipping — sensor cost barriers
+
+**Opportunities for Luke's Stack (Wing Trading AI):**
+1. **Coffee as macro signal** — Aoi's intelligence layer can ingest coffee commodity data (Arabica/Robusta prices, weather in origin countries, ICO reports) as a macro input for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
+
+2. **Coffee trading via Binance/Bybit** — Apply the Wing Trading AI decision engine framework to coffee futures. Start with Binance coffee futures for market data.
+
+3. **Aoi extends to coffee** — Existing macro + sentiment analysis capability can extend to coffee commodity research without new infrastructure.
+
+**Build Opportunities:**
+4. **Farm-to-cup data aggregation agent** — connects Cropin (farm data), Demetria (grading), Cropster (roasting), and logistics APIs. Gives roasters/traders real-time visibility across supply chain.
+
+5. **Smallholder decision support agent** — mobile-first, works offline, harvest timing + disease alerts + market prices. On-device ML to handle connectivity gaps.
+
+6. **Coffee price intelligence agent** — real-time monitoring of Arabica/Robusta prices, weather in origins, news. Buy/sell signals for physical traders and arbitrage across exchanges.
+
+7. **Sustainability compliance agent** — tracks EU regulations, auto-generates required documentation from supply chain data.
+
+### 9.6 Important Caveats
+
+- **Fully autonomous roasting** — still requires human sensory validation. AI handles process control, not flavor judgment.
+- **Disease detection accuracy** in varied field conditions — [UNVERIFIED]
+- **Electronic nose** — 3-5 years away from commercial viability for coffee flavor prediction
+- **Price forecasting models** — coffee price shocks from climate events (frost, drought) remain hard to predict. AI helps but human judgment on climate risk is still superior.
+- **Blockchain traceability ≠ fair pricing** — farmers often still receive minimum prices even with full traceability. Tracing coffee doesn't automatically improve farmer livelihoods.
+
+### 9.7 Source Quality
+
+**Well-documented:** Cropin, Demetria, Farmer Connect, ECOM, Volcafe, Cropster, Luckin Coffee, Starbucks (earnings reports), SCA working groups.
+
+**Growing/less data:** Mosi, EcoChain, Pecan Machine, Banana Rain (specialty press only), Xcafé (limited English documentation).
+
+**Key industry voices:** James Hoffmann (World Barista Champion), SCA technical committees, World Coffee Research, ICO.
 
 ---
 
