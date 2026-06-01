@@ -240,6 +240,81 @@ This skill is designed for multi-agent stacks. Each agent type has a scoped subs
 
 ---
 
+### Error & Fallback Playbook
+
+Each agent handles errors by returning a structured error response and escalating only when required. Agents should never silently fail or return hallucinations.
+
+**General Error Response Format (JSON):**
+```json
+{
+  "type": "error",
+  "agent": "Store Ops | Content | Research | Operations | Compliance | Archive",
+  "error_code": "PARSE_FAILED | API_ERROR | AMBIGUOUS_INTENT | BELOW_THRESHOLD | UNKNOWN_SUPPLIER | INSUFFICIENT_DATA",
+  "message": "Human-readable error description",
+  "context": "What the agent was attempting when the error occurred",
+  "fallback_action": "what the agent did instead",
+  "escalate": true,
+  "escalation_target": "Agent name or 'human'",
+  "recovery_hint": "What information or action would resolve this"
+}
+```
+
+**Store Ops Agent — Error Handling:**
+
+| Error | Code | Fallback Action | Escalate? |
+|-------|------|-----------------|------------|
+| WhatsApp message unparseable | `PARSE_FAILED` | Reply: "Mohon ulangi pesannya ya — saya belum paham. Bisa diketik ulang?" | No |
+| WooCommerce API returns error | `API_ERROR` | Log error, flag for Operations, reply customer "Sedang ada masalah teknis, pesanan diproses manual" | Yes → Operations |
+| Product out of stock | `INSUFFICIENT_DATA` | Query CATALOG.md for alternatives, offer substitutes | No |
+| Order value > Rp 2M | `AMBIGUOUS_INTENT` | Flag for human review before confirming | Yes → human |
+| Payment not confirmed > 48h | `API_ERROR` | Send follow-up message, if no response after 72h mark pending-cancel | Yes → human |
+| Intent = complaint | `BELOW_THRESHOLD` | Do not attempt to resolve. Acknowledge, apologize, escalate immediately | Yes → human |
+
+**Content Agent — Error Handling:**
+
+| Error | Code | Fallback Action | Escalate? |
+|-------|------|-----------------|------------|
+| No cupping data for product | `INSUFFICIENT_DATA` | Write generic tasting notes based on origin/process; flag "not cup-tested" in notes | No |
+| Conflicting information sources | `PARSE_FAILED` | Prioritize most recent source; note discrepancy in output | No |
+| Customer feedback contradicts cupping | `AMBIGUOUS_INTENT` | Note both perspectives; do not resolve the contradiction | No |
+| Image generation fails | `API_ERROR` | Fall back to text-only caption | No |
+
+**Research Agent — Error Handling:**
+
+| Error | Code | Fallback Action | Escalate? |
+|-------|------|-----------------|------------|
+| Supplier quote missing key data | `INSUFFICIENT_DATA` | Flag missing fields in output; do not estimate | No |
+| Price feed unavailable | `API_ERROR` | Add staleness warning; output last-known price with disclaimer | No |
+| Cupping score below 80 | `BELOW_THRESHOLD` | Mark as "reject for specialty"; include in output with explanation | No |
+| Supplier not in database | `UNKNOWN_SUPPLIER` | Log as new supplier, request human to verify before onboarding | Yes → human |
+
+**Operations Agent — Error Handling:**
+
+| Error | Code | Fallback Action | Escalate? |
+|-------|------|-----------------|------------|
+| Container ETA unknown | `AMBIGUOUS_INTENT` | Contact freight forwarder; do not guess | No |
+| QC check reveals defects | `BELOW_THRESHOLD` | Stop fulfillment, notify Compliance | Yes → Compliance |
+| Inventory count mismatch | `PARSE_FAILED` | Recount; if still mismatch, flag for audit | Yes → human |
+| Customs delay > expected | `API_ERROR` | Escalate to Compliance for permit review | Yes → Compliance |
+
+**Compliance Agent — Error Handling:**
+
+| Error | Code | Fallback Action | Escalate? |
+|-------|------|-----------------|------------|
+| BPOM number format invalid | `PARSE_FAILED` | Return checklist with flag; do not self-certify | No |
+| Product has no halal status | `AMBIGUOUS_INTENT` | Flag as "requires halal review"; do not list as halal | No |
+| Unknown regulatory scenario | `UNKNOWN_SUPPLIER` | Route to external legal counsel | Yes → external |
+
+**Archive Agent — Error Handling:**
+
+| Error | Code | Fallback Action | Escalate? |
+|-------|------|-----------------|------------|
+| Record already exists (duplicate ID) | `PARSE_FAILED` | Return existing record; do not overwrite without explicit update command | No |
+| Schema mismatch on write | `PARSE_FAILED` | Return error with expected schema; do not write partial data | No |
+| Query returns no results | `INSUFFICIENT_DATA` | Return empty result set with suggested broader query | No |
+
+---
+
 ## Core Knowledge Areas
 
 ### 1. Green Coffee Sourcing
@@ -508,6 +583,47 @@ The defining process for Sumatran coffee. Steps:
 **Roast Loss:** Typical weight loss 12–18% depending on density, moisture, and roast level.  
 **Batch Size:** Production roasters range from 1kg (sample) to 120kg+ (industrial).  
 **Roast Time:** 8–15 minutes for sample/small batch, 10–18 minutes for production.
+
+---
+
+#### Indonesian Coffee Roasting Notes
+
+Giling Basah (wet-hull) beans have distinct roasting behavior compared to standard washed or natural coffees. Adjust your approach when roasting Indonesian origins:
+
+**Giling Basah Characteristics Affecting Roasting:**
+
+- **High residual moisture**: Wet-hulled beans typically enter the roaster at 15–20% moisture (vs 10–12% for washed). The drying phase runs longer and cooler — pushing heat too early causes uneven moisture evaporation and mutes the flavor development.
+- **Lower bean density**: Wet-hulling reduces bean density, making beans more susceptible to scorching and requiring gentler heat application.
+- **Irregular size distribution**: Mix of screen sizes means beans develop unevenly in the same batch. Account for this with more generous development time.
+- **Thin parchment remnant**: The "kulit ari" (pergamino remnant) left after wet-hulling can create a slightly papery note if over-developed. Best practice: end the roast while bean interior is still slightly soft at the core.
+
+**Recommended Adjustments by Origin:**
+
+| Origin | Key Adjustment |
+|--------|---------------|
+| Sumatra Mandheling/Gayo | Lower charge temp ~10–15°F vs washed. Longer drying phase. More development time post-FC to tame the earthy/herbal intensity. Medium-Dark to Dark suits the origin profile. |
+| Java Estate | Similar to washed — follows standard profile. Some darker estate lots benefit from slightly longer Maillard for smoky character. |
+| Sulawesi Toraja | Moderate approach. Post-FC development brings out the dark fruit complexity. Don't rush the finish. |
+| Flores Bajawa | Lower density — watch for scorching at high drum speeds. Lighter roasts preserve the citrus/mineral notes. |
+| Bali Kintamani | Can handle slightly higher heat early. Bright acidity holds well — medium or medium-light works best. |
+
+**General Rules for Indonesian Roasting:**
+
+- **Charge temp**: 10–15°F lower than washed coffees of same density
+- **Drying phase**: Extend by 1–2 minutes. Target bean color change to yellow-brown before color shift to brown.
+- **First crack**: Typically quieter and later than washed coffees — don't expect the same crack intensity
+- **Development time**: +2–4% DTR compared to washed equivalents. Giling Basah benefits from the extra cook.
+- **Drop temperature**: 5–10°F lower than you might for a washed coffee — the residual moisture carries extra heat into the bean.
+- **Rest time**: Indonesian coffees benefit from 3–5 days rest minimum after roast. The Giling Basah profile opens up significantly with degassing.
+
+**When the Roast Goes Wrong:**
+
+| Problem | Likely Cause | Fix |
+|---------|-------------|-----|
+| Muddy, indistinct flavors | Under-developed, too cool a roast | Increase post-FC development time by 10–15% |
+| Harsh, papery note | Over-developed or too high a drop temp | Reduce DTR 2–3%, lower drop temp |
+| Burnt/chemical off-flavor | Drum too hot, scorching | Lower charge temp, slow drying phase |
+| Flat, no sweetness | Too fast overall | Extend total roast time by 1–2 min |
 
 ---
 

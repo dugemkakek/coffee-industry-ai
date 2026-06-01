@@ -13,8 +13,13 @@ A concise cheat sheet for coffee industry operations. For full agent knowledge, 
 | Guatemala | Chocolate, spice, structured | Bourbon, Catuai | High altitude |
 | Kenya | Blackcurrant, tomato, bright | SL28, SL34 | High acidity |
 | Brazil | Nutty, low acidity, chocolate | Mundo Novo, Catucai | Bulk/C Blend base |
-| Indonesia | Earthy, herbal, full body | Typica, Catimor | Wet-hulled (Giling Basah) |
-| Panama (Geisha) | Jasmine, bergamot, tea-like | Geisha | Competition variety |
+|| Indonesia | Earthy, herbal, full body | Typica, Catimor | 6 islands — see SKILL.md Indonesian Origins for full profiles ||
+|| Sumatra Mandheling | Earthy, cedar, dark chocolate | Typica, Catimor | Giling Basah, low acidity, heavy body ||
+|| Java Estate | Dark chocolate, smoky, earthy | Typica, Bourbon | Dutch colonial estates, Nov–Apr harvest ||
+|| Sulawesi Toraja | Complex, dark fruit, spicy | Typica, Catimor | Most acidic Indonesian origin, May–Oct ||
+|| Flores Bajawa | Earthy, woody, citrus, mineral | Typica | Volcanic soil, Jun–Dec, emerging origin ||
+|| Bali Kintamani | Citrus, tropical fruit, clean | Typica, Bourbon | Brightest acidity Indonesian, May–Oct ||
+|| Panama (Geisha) | Jasmine, bergamot, tea-like | Geisha | Competition variety |
 
 ---
 
@@ -70,7 +75,6 @@ A concise cheat sheet for coffee industry operations. For full agent knowledge, 
 |------|---------|
 | **FOB** | Buyer owns goods at port of origin |
 | **CIF** | Seller pays freight/insurance to destination |
-| **ECAE** | [placeholder — remove]
 | **MOQ** | Minimum Order Quantity (typically 1-5 bags of 60kg) |
 | **30kg GrainPro** | Standard specialty bag size |
 | **Container** | 20ft = ~275 x 60kg bags, 40ft = ~550 x 60kg bags |
@@ -108,7 +112,7 @@ Example: 60kg bag at $13/lb FOB
 
 1. **Source** → Request samples → Cup → Select lot
 2. **Contract** → Negotiate FOB → Agree QC clause → Place order
-3. **Ship** → Book container → Track →等待 arrival
+3. **Ship** → Book container → Track → await arrival
 4. **Receive** → QC check against contract → Approve warehouse
 5. **Roast** → Profile development → Lock in curve → Production
 6. **QC** → Cup every production roast (Cuppers Checklist)
