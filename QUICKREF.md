@@ -159,4 +159,21 @@ Primary defects: 0 = clean, 1-4 = specialty possible, 5+ = below specialty
 
 ---
 
-*Full knowledge base: SKILL.md | Last updated: 2026-05-31*
+## Brew Methods Quick Ref
+
+| Method | Ratio | Grind | Temp | Time | Best For |
+|--------|-------|-------|------|------|----------|
+| V60 | 1:15–1:17 | Medium (sea salt) | 93–96°C | 2:30–3:30 | Clarity, origin transparency |
+| Chemex | 1:15–1:17 | Medium-coarse | 94°C | 4:00–5:00 | Bright, clean (thick paper) |
+| AeroPress | 1:13–1:16 | Medium | 85–96°C | 1:30–2:30 | Versatile, forgiving |
+| French Press | 1:15–1:17 | Coarse | 93–95°C | 4:00 + settle | Full body, heavy texture |
+| Moka Pot | Fill basket | Medium-fine | Pre-boil H₂O | 3–5 min | Espresso-adjacent, strong |
+| Cold Brew | 1:5–1:6 | Coarse | Room/4°C | 12–24h | Low acid, smooth, concentrate |
+| Siphon | 1:15 | Medium | Full boil | 1:00–1:30 | Clean, tea-like, theatrical |
+| Espresso | 1:2–1:3 | Fine | 90–96°C | 22–38s | Concentrated, crema |
+
+*Full brewing knowledge: BREWING_KNOWLEDGE.md | Last updated: 2026-06-01*
+
+---
+
+*Full knowledge base: SKILL.md | Last updated: 2026-06-01*

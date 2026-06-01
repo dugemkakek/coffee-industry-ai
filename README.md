@@ -32,9 +32,14 @@ skill_view(name="coffee-industry")
 
 ```
 coffee-industry-ai/
-├── SKILL.md              ← Agent knowledge base (load this)
-├── QUICKREF.md           ← Human-readable cheat sheet
-├── EXAMPLE_PROMPTS.md    ← Realistic prompt templates
+├── SKILL.md                  ← Agent knowledge base (load this)
+├── QUICKREF.md               ← Human-readable cheat sheet
+├── EXAMPLE_PROMPTS.md        ← Realistic prompt templates
+├── BREWING_KNOWLEDGE.md      ← Brewing, extraction, processing, roasting, defects (1325 lines)
+├── CATALOG.md                ← Product SKU reference (18 SKUs)
+├── SCHEMAS.md                ← Archive agent data models
+├── AGENT_SOURCES.md          ← AI in coffee supply chain research digest
+├── CHANGELOG.md              ← Version history
 └── README.md
 ```
 

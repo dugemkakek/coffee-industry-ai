@@ -18,6 +18,7 @@ The agent assists with:
 - **Contracts & pricing**: C-market dynamics, specialty premiums, contract structures
 - **E-commerce & subscriptions**: DTC models, roast-to-order, subscription management
 - **Regulatory compliance**: FDA food safety, import permits, labeling requirements
+- **Brewing & extraction science**: For detailed brewing, espresso calibration, processing, roasting, and defect knowledge: load `BREWING_KNOWLEDGE.md`
 
 ---
 
@@ -31,6 +32,11 @@ arabica, robusta, giling basah, wet-hull, sourcing, barista,
 extraction, brew method, pour over, french press, aeroPress,
 WooCommerce, order, customer, supplier, origin, variety, lot,
 harvest, fermentation, first crack, development time,
+v60, chemex, kalita, siphon, moka pot, cold brew, batch brew,
+dial-in, tamp, WDT, microfoam, latte art, TDS, extraction yield,
+roast curve, DTR, charge temp, rate of rise, roast defect,
+cupping protocol, SCA score, defect category, process method,
+washed, natural, honey, anaerobic, carbonic maceration,
 caffè, caffe, latte, cappuccino, single origin, blend,
 BPOM, halal, MUI, SNI, Indonesian coffee, Sumatra, Java, Sulawesi
 ```
@@ -125,7 +131,9 @@ This skill is designed for multi-agent stacks. Each agent type has a scoped subs
 **Output Format:** Structured JSON for orders (see Output Format Standards); prose for customer replies
 
 **Trigger Keywords (in addition to global list):**
-`order`, `beli`, `pesan`, `stock`, `kirim`, `tracking`, `resi`, `WooCommerce`, `checkout`, `subscription`, `langganan`
+`order`, `beli`, `pesan`, `stock`, `kirim`, `tracking`, `resi`, `WooCommerce`, `checkout`, `subscription`, `langganan`, `brew guide`, `extraction`, `dial-in`, `v60`, `espresso`, `how to brew`
+
+For detailed brew parameters (ratios, temperatures, timing): refer to `BREWING_KNOWLEDGE.md`
 
 **Escalation Triggers:**
 - Complaint about wrong order
@@ -152,7 +160,9 @@ This skill is designed for multi-agent stacks. Each agent type has a scoped subs
 **Output Format:** Markdown with headers, bullet points. Customer-facing tone (not technical). Can include emoji.
 
 **Trigger Keywords:**
-`caption`, `post`, `instagram`, `deskripsi`, `menu`, `description`, `flavor`, `tasting notes`, `asal kopi`, `posting`, `content`
+`caption`, `post`, `instagram`, `deskripsi`, `menu`, `description`, `flavor`, `tasting notes`, `asal kopi`, `posting`, `content`, `brew guide`, `how to brew`, `extraction`
+
+For detailed brew parameters and processing knowledge: refer to `BREWING_KNOWLEDGE.md`
 
 ---
 

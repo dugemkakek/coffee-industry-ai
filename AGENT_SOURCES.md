@@ -409,7 +409,7 @@ Starbucks Deep Brew is documented in earnings calls and press. Luckin Coffee is 
 
 1. **Coffee as an alternative market** — The intelligence layer could ingest coffee commodity data (Arabica/Robusta prices, weather, ICO reports) as a macro signal for crypto trading. Coffee prices correlate with inflation and emerging market sentiment.
 
-2. **Coffee trading strategy research** — Apply the Wing Trading AI decision engine framework to coffee futures. Coffee trades on Binance, Bybit, and ICE (though ICE may be restricted). Start with Binance coffee futures.
+2. **Coffee trading strategy research** — Apply a trading AI decision engine framework to coffee futures. Coffee trades on Binance, Bybit, and ICE. Start with Binance coffee futures.
 
 3. **The intelligence layer** — Existing macro + sentiment analysis capability could extend to coffee commodity research without new infrastructure.
 
